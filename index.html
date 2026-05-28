@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #F9f9fa; color: #232323; font-family: 'Outfit', sans-serif; padding: 40px; }
+        
+        /* 2:1 Layout Container */
+        .main-wrapper { 
+            display: flex; 
+            gap: 20px; 
+            max-width: 1000px; 
+            margin: auto; 
+        }
+        
+        .left-panel { flex: 2; }
+        .right-panel { flex: 1; }
+
+        .container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        
+        h2 { color: #724b9e; margin-top: 0; }
+        .code-container { background: #232323; color: #fff; padding: 20px; border-radius: 6px; font-family: monospace; line-height: 2.5; }
+        .code-line { padding: 4px 8px; border-radius: 4px; }
+        .active-line { background-color: rgba(232, 210, 39, 0.4); border: 1px solid #e8d227; }
+        
+        input { width: 60px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #724b9e; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 6px; font-family: 'Outfit'; font-weight: 600; margin-top: 10px; }
+        
+        #output-box { background: #232323; color: #fff; padding: 20px; border-radius: 6px; height: 300px; overflow-y: auto; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="left-panel container">
+        <h2>For-Loop Simulator</h2>
+        <div style="margin-bottom: 20px;">
+            range(<input id="start" type="number" value="0">, 
+                  <input id="stop" type="number" value="3">, 
+                  <input id="step" type="number" value="1">)
+            <br>
+            <button onclick="initSimulator()">Initialize</button>
+            <button onclick="nextStep()">Next Step</button>
+        </div>
+
+        <strong>Python Code:</strong>
+        <div class="code-container">
+            <div id="line-0" class="code-line">for i in range(start, stop, step):</div>
+            <div id="line-1" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;print(i)</div>
+        </div>
+    </div>
+
+    <div class="right-panel container">
+        <strong>Terminal Output:</strong>
+        <div id="output-box"></div>
+    </div>
+</div>
+
+<script>
+    let values = [];
+    let currentIndex = -1;
+    let isHeader = true;
+
+    function initSimulator() {
+        const start = parseInt(document.getElementById('start').value);
+        const stop = parseInt(document.getElementById('stop').value);
+        const step = parseInt(document.getElementById('step').value);
+        
+        values = [];
+        for (let i = start; i < stop; i += step) values.push(i);
+        
+        currentIndex = -1;
+        isHeader = true;
+        document.getElementById('output-box').innerHTML = "";
+        document.querySelectorAll('.code-line').forEach(el => el.classList.remove('active-line'));
+    }
+
+    function nextStep() {
+        const line0 = document.getElementById('line-0');
+        const line1 = document.getElementById('line-1');
+        const output = document.getElementById('output-box');
+
+        line0.classList.remove('active-line');
+        line1.classList.remove('active-line');
+
+        if (isHeader) {
+            if (currentIndex + 1 < values.length) {
+                currentIndex++;
+                line0.classList.add('active-line');
+                isHeader = false;
+            } else {
+                output.innerHTML += "Loop Complete.<br>";
+            }
+        } else {
+            line1.classList.add('active-line');
+            output.innerHTML += ">> " + values[currentIndex] + "<br>";
+            isHeader = true;
+        }
+    }
+</script>
+</body>
+</html>
