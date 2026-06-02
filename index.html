@@ -16,7 +16,7 @@
         
         .left-panel { flex: 2; }
         .right-panel { flex: 1; }
-
+ 
         .container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
         h2 { color: #724b9e; margin-top: 0; }
@@ -31,7 +31,7 @@
     </style>
 </head>
 <body>
-
+ 
 <div class="main-wrapper">
     <div class="left-panel container">
         <h2>For-Loop Simulator</h2>
@@ -43,25 +43,26 @@
             <button onclick="initSimulator()">Initialize</button>
             <button onclick="nextStep()">Next Step</button>
         </div>
-
+ 
         <strong>Python Code:</strong>
         <div class="code-container">
             <div id="line-0" class="code-line">for i in range(start, stop, step):</div>
             <div id="line-1" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;print(i)</div>
         </div>
     </div>
-
+ 
     <div class="right-panel container">
         <strong>Terminal Output:</strong>
         <div id="output-box"></div>
     </div>
 </div>
-
+ 
 <script>
     let values = [];
     let currentIndex = -1;
     let isHeader = true;
-
+    let done = false;
+ 
     function initSimulator() {
         const start = parseInt(document.getElementById('start').value);
         const stop = parseInt(document.getElementById('stop').value);
@@ -72,25 +73,28 @@
         
         currentIndex = -1;
         isHeader = true;
+        done = false;
         document.getElementById('output-box').innerHTML = "";
         document.querySelectorAll('.code-line').forEach(el => el.classList.remove('active-line'));
     }
-
+ 
     function nextStep() {
         const line0 = document.getElementById('line-0');
         const line1 = document.getElementById('line-1');
         const output = document.getElementById('output-box');
-
+ 
         line0.classList.remove('active-line');
         line1.classList.remove('active-line');
-
+ 
         if (isHeader) {
             if (currentIndex + 1 < values.length) {
                 currentIndex++;
                 line0.classList.add('active-line');
                 isHeader = false;
-            } else {
-                output.innerHTML += "Loop Complete.<br>";
+            } else if (!done) {
+                line0.classList.add('active-line');
+                output.innerHTML += '<span style="color: #e8d227; font-style: italic;">// Loop complete</span><br>';
+                done = true;
             }
         } else {
             line1.classList.add('active-line');
